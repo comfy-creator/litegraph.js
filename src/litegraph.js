@@ -5005,6 +5005,13 @@ LGraphNode.prototype.executeAction = function(action)
         this._nodes = [];
         this.graph = null;
 
+        Object.defineProperty(this, "bounding", {
+            get: function () {
+                return this._bounding;
+            },
+            enumerable: true,
+        });
+
         Object.defineProperty(this, "pos", {
             set: function(v) {
                 if (!v || v.length < 2) {

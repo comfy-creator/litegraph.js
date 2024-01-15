@@ -74,7 +74,7 @@ def packJSCode(files):
     return fullcode_path
 
 def compileAndMinify(input_path, output_path):
-    print " + Compiling and minifying..."
+    print(" + Compiling and minifying...")
     if output_path != None:
         os.system( compiler_path % ( input_path, output_path) )
         sys.stderr.write(" * Stored in " + output_path + "\n");
