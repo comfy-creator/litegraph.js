@@ -230,8 +230,6 @@ export const LiteGraph: {
         }
     >;
 
-    ContextMenu: typeof ContextMenu;
-
     NODE_SELECTED_TITLE_COLOR: string;
     WIDGET_BGCOLOR: string;
     WIDGET_OUTLINE_COLOR: string;
@@ -358,11 +356,26 @@ export const LiteGraph: {
     ): boolean;
     growBounding(bounding: Vector4, x: number, y: number): Vector4;
     isInsideBounding(p: Vector2, bb: Vector4): boolean;
+    overlapBounding(a: Vector4, b: Vector4): boolean;
     hex2num(hex: string): [number, number, number];
     num2hex(triplet: [number, number, number]): string;
     ContextMenu: typeof ContextMenu;
+    closeAllContextMenus(ref_window?: Window): void;
     extendClass<A, B>(target: A, origin: B): A & B;
+    CurveEditor: typeof CurveEditor;
     getParameterNames(func: string): string[];
+    pointerListenerAdd(
+        oDOM: HTMLElement,
+        sEvIn: string,
+        fCall: (event: any) => void,
+        capture?: boolean
+    ): void;
+    pointerListenerRemove(
+        oDOM: HTMLElement,
+        sEvent: string,
+        fCall: (event: any) => void,
+        capture?: boolean
+    ): void;
 
     fetchFile: (
         url: string | File | Blob,
@@ -1161,6 +1174,32 @@ export declare class DragAndScale {
     changeScale(value: number, zooming_center?: Vector2): void;
     changeDeltaScale(value: number, zooming_center?: Vector2): void;
     reset(): void;
+}
+
+export declare class CurveEditor {
+    points: [number, number][];
+    selected: number;
+    nearest: number;
+    size: [number, number] | null;
+    must_update: boolean;
+    margin: number;
+
+    constructor(points: [number, number][]);
+
+    static sampleCurve(f: number, points: [number, number][]): number;
+
+    draw(
+        ctx: CanvasRenderingContext2D,
+        size: [number, number],
+        graphcanvas: any,
+        background_color?: string,
+        line_color?: string,
+        inactive?: boolean
+    ): void;
+    onMouseDown(localpos: [number, number], graphcanvas: any): boolean;
+    onMouseMove(localpos: [number, number], graphcanvas: any): void;
+    onMouseUp(localpos: [number, number], graphcanvas: any): boolean;
+    getCloserPoint(pos: [number, number], max_dist?: number): number;
 }
 
 /**
