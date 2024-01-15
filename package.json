@@ -16,7 +16,8 @@
         "test:allVersions": "./utils/test.sh",
         "prettier": "npx prettier --write src/**/*.* css/**/*.*",
         "lint": "npx eslint src",
-        "lint:fix": "npx eslint --fix src"
+        "lint:fix": "npx eslint --fix src",
+        "prepare": "npm run build"
     },
     "repository": {
         "type": "git",
