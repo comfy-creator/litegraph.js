@@ -852,6 +852,13 @@
             },
             enumerable: true,
         });
+
+        Object.defineProperty(this, "nodes", {
+            get: function () {
+                return this._nodes;
+            },
+            enumerable: true,
+        });
     }
 
     global.LGraph = LiteGraph.LGraph = LGraph;

@@ -442,6 +442,7 @@ export declare class LGraph {
     last_update_time: number;
     links: Record<number, LLink>;
     list_of_graphcanvas: LGraphCanvas[];
+    nodes: LGraphNode[];
     outputs: any;
     runningtime: number;
     starttime: number;
@@ -630,6 +631,7 @@ export declare class LGraph {
      * @returns if there was any error parsing
      */
     configure(data: object, keep_old?: boolean): boolean | undefined;
+    onConfigure?(data: object): void;
     load(url: string): void;
 }
 
