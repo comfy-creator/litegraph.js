@@ -434,7 +434,6 @@ export declare class LGraph {
     fixedtime: number;
     fixedtime_lapse: number;
     globaltime: number;
-    groups: LGraphGroup[];
     inputs: any;
     iteration: number;
     last_link_id: number;
@@ -442,7 +441,6 @@ export declare class LGraph {
     last_update_time: number;
     links: Record<number, LLink>;
     list_of_graphcanvas: LGraphCanvas[];
-    nodes: LGraphNode[];
     outputs: any;
     runningtime: number;
     starttime: number;
@@ -633,6 +631,10 @@ export declare class LGraph {
     configure(data: object, keep_old?: boolean): boolean | undefined;
     onConfigure?(data: object): void;
     load(url: string): void;
+
+    /** Private-property accessors */
+    get nodes(): LGraphNode[];
+    get groups(): LGraphGroup[];
 }
 
 export type SerializedLLink = [number, string, number, number, number, number];
