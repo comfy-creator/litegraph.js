@@ -230,6 +230,45 @@ export const LiteGraph: {
         }
     >;
 
+    ContextMenu: typeof ContextMenu;
+
+    NODE_SELECTED_TITLE_COLOR: string;
+    WIDGET_BGCOLOR: string;
+    WIDGET_OUTLINE_COLOR: string;
+    WIDGET_TEXT_COLOR: string;
+    WIDGET_SECONDARY_TEXT_COLOR: string;
+    NODE_BOX_OUTLINE_COLOR: string;
+    DEFAULT_GROUP_FONT_SIZE: number;
+    GRID_SHAPE: number;
+    NODE_MODES: string[];
+    NODE_MODES_COLORS: string[];
+    VERTICAL_LAYOUT: string;
+    proxy: string | null;
+    middle_click_slot_add_default_node: boolean;
+    release_link_on_empty_shows_menu: boolean;
+    pointerevents_method: string;
+    ctrl_shift_v_paste_connect_unselected_outputs: boolean;
+    use_uuids: boolean;
+    dialog_close_on_mouse_leave: boolean;
+    dialog_close_on_mouse_leave_delay: number;
+    shift_click_do_break_link_from: boolean;
+    click_do_break_link_to: boolean;
+    search_hide_on_mouse_leave: boolean;
+    search_filter_enabled: boolean;
+    search_show_all_on_open: boolean;
+    auto_load_slot_types: boolean;
+    registered_slot_in_types: Record<any, any>; // Try to improve this type
+    registered_slot_out_types: Record<any, any>;
+    slot_types_in: string[];
+    slot_types_out: string[];
+    slot_types_default_in: any[];
+    slot_types_default_out: any[];
+    alt_drag_do_clone_nodes: boolean;
+    do_add_triggers_slots: boolean;
+    allow_multi_output_for_events: boolean;
+    middle_click_slot_add_default_node: boolean;
+    release_link_on_empty_shows_menu: boolean;
+
     createNode<T extends LGraphNode = LGraphNode>(type: string): T;
     /** Register a node class so it can be listed when the user wants to create a new one */
     registerNodeType(type: string, base: { new (): LGraphNode }): void;
@@ -324,6 +363,32 @@ export const LiteGraph: {
     ContextMenu: typeof ContextMenu;
     extendClass<A, B>(target: A, origin: B): A & B;
     getParameterNames(func: string): string[];
+
+    fetchFile: (
+        url: string | File | Blob,
+        type: string,
+        on_complete: Function,
+        on_error?: Function
+    ) => FileReader | Promise<any>;
+    registerNodeType: (type: string, base_class: any) => void;
+    reloadNodes: (folder_wildcard: string) => void;
+    compareObjects: (a: object, b: object) => boolean;
+    distance: (a: Vector2, b: Vector2) => number;
+    colorToString: (c: string) => string;
+    isInsideRectangle: (
+        x: number,
+        y: number,
+        left: number,
+        top: number,
+        width: number,
+        height: number
+    ) => boolean;
+    growBounding: (bounding: Vector4, x: number, y: number) => Vector4;
+    isInsideBounding: (p: Vector2, bb: Vector4) => boolean;
+    hex2num: (hex: string) => [number, number, number];
+    num2hex: (triplet: [number, number, number]) => string;
+    extendClass: <A, B>(target: A, origin: B) => A & B;
+    getParameterNames: (func: Function) => string[];
 };
 
 export type serializedLGraph<
@@ -356,6 +421,7 @@ export declare class LGraph {
     fixedtime: number;
     fixedtime_lapse: number;
     globaltime: number;
+    groups: LGraphGroup[];
     inputs: any;
     iteration: number;
     last_link_id: number;

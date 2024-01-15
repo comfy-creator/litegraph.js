@@ -833,6 +833,7 @@
      */
 
     function LGraph(o) {
+        this._ctor();
         if (LiteGraph.debug) {
             console.log("Graph created");
         }
@@ -842,6 +843,15 @@
         if (o) {
             this.configure(o);
         }
+    }
+
+    LGraph.prototype._ctor = function() {
+        Object.defineProperty(this, "groups", {
+            get: function () {
+                return this._groups;
+            },
+            enumerable: true,
+        });
     }
 
     global.LGraph = LiteGraph.LGraph = LGraph;
