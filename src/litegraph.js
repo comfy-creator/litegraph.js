@@ -2340,8 +2340,7 @@
 
 		this.extra = data.extra || {};
 
-		if(this.onConfigure)
-			this.onConfigure(data);
+		if(this.onConfigure) { this.onConfigure(data); }
 
         this._version++;
         this.setDirtyCanvas(true, true);

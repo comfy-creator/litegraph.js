@@ -1282,7 +1282,6 @@ export declare class LGraphCanvas {
     bgcanvas: HTMLCanvasElement;
     bgctx: CanvasRenderingContext2D;
     canvas: HTMLCanvasElement;
-    canvas_mouse: Vector2;
     clear_background: boolean;
     connecting_node: LGraphNode | null;
     connections_width: number;
@@ -1326,6 +1325,10 @@ export declare class LGraphCanvas {
         | typeof LiteGraph.LINEAR_LINK
         | typeof LiteGraph.SPLINE_LINK;
     live_mode: boolean;
+
+    mouse: Vector2;
+    graph_mouse: Vector2;
+
     node_capturing_input: LGraphNode | null;
     node_dragged: LGraphNode | null;
     node_in_panel: LGraphNode | null;
@@ -1359,7 +1362,8 @@ export declare class LGraphCanvas {
     onNodeDblClicked: ((node: LGraphNode) => void) | null;
     /** Called by `LGraphCanvas.selectNodes` */
     onSelectionChange: ((nodes: Record<number, LGraphNode>) => void) | null;
-    /** Called by `LGraphCanvas.showSearchBox` */
+
+    /** Called by `LGraphCanvas.showSearchBox` Use to personalize the search-box */
     onSearchBox:
         | ((
               helper: Element,
@@ -1370,6 +1374,7 @@ export declare class LGraphCanvas {
     onSearchBoxSelection:
         | ((name: string, event: MouseEvent, graphCanvas: LGraphCanvas) => void)
         | null;
+
     pause_rendering: boolean;
     render_canvas_border: boolean;
     render_collapsed_slots: boolean;
@@ -1378,21 +1383,36 @@ export declare class LGraphCanvas {
     render_connections_shadows: boolean;
     render_curved_connections: boolean;
     render_execution_order: boolean;
+    render_link_tooltip: boolean;
+    /** Render only selected nodes (and their connections) */
     render_only_selected: boolean;
     render_shadows: boolean;
     render_title_colored: boolean;
+
     round_radius: number;
     selected_group: null | LGraphGroup;
     selected_group_resizing: boolean;
     selected_nodes: Record<number, LGraphNode>;
+    /** Show additional information on top of the nodes */
     show_info: boolean;
+    /** Font used for node titles */
     title_text_font: string;
     /** set to true to render title bar with gradients */
     use_gradients: boolean;
     visible_area: DragAndScale["visible_area"];
     visible_links: LLink[];
     visible_nodes: LGraphNode[];
+    /** Modify alpha value of the canvas when zooming */
     zoom_modify_alpha: boolean;
+
+    /** Snap to grid */
+    align_to_grid: boolean;
+    /** Forces to redraw the canvas if the mouse does anything */
+    set_canvas_dirty_on_mouse_event: boolean;
+    /** Background color when the background is cleared */
+    clear_background_color: string;
+    /** If set to true, users cannot modify the graph */
+    read_only: boolean;
 
     /** clears all the data inside */
     clear(): void;
