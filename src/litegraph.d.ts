@@ -242,8 +242,6 @@ export const LiteGraph: {
     NODE_MODES_COLORS: string[];
     VERTICAL_LAYOUT: string;
     proxy: string | null;
-    middle_click_slot_add_default_node: boolean;
-    release_link_on_empty_shows_menu: boolean;
     pointerevents_method: string;
     ctrl_shift_v_paste_connect_unselected_outputs: boolean;
     use_uuids: boolean;
@@ -1266,6 +1264,7 @@ export declare class LGraphCanvas {
 
     static active_canvas: HTMLCanvasElement;
 
+    pointer_is_down: boolean;
     allow_dragcanvas: boolean;
     allow_dragnodes: boolean;
     /** allow to control widgets, buttons, collapse, etc */

@@ -5,6 +5,7 @@ npm-debug.log
 temp/
 temp/*
 coverage/
+.idea
 
 # Editors
 /.vscode/*
