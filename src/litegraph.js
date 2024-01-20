@@ -6029,7 +6029,8 @@ LGraphNode.prototype.executeAction = function(action)
             // clone node ALT dragging
             if (LiteGraph.alt_drag_do_clone_nodes && e.altKey && node && this.allow_interaction && !skip_action && !this.read_only)
             {
-                if (cloned = node.clone()){
+                var cloned = node.clone();
+                if (cloned) {
                     cloned.pos[0] += 5;
                     cloned.pos[1] += 5;
                     this.graph.add(cloned,false,{doCalcSize: false});

@@ -51,6 +51,6 @@ module.exports = {
         "no-unused-vars": "warn",
         "no-mixed-spaces-and-tabs": "warn",
         "no-unreachable": "warn",
-        "curly": ["warn", "all"]
+        "curly": ["warn", "multi-or-nest"]
     }
 }
