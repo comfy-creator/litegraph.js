@@ -11117,7 +11117,7 @@ LGraphNode.prototype.executeAction = function(action)
 			}else{
 				// is not not connected
 			}
-			nodeNewType = false;
+			var nodeNewType = false;
 			if(typeof slotTypesDefault[fromSlotType] == "object" || typeof slotTypesDefault[fromSlotType] == "array"){
 				for(var typeX in slotTypesDefault[fromSlotType]){
 					if (opts.nodeType == slotTypesDefault[fromSlotType][typeX] || opts.nodeType == "AUTO"){
@@ -11985,7 +11985,7 @@ LGraphNode.prototype.executeAction = function(action)
                 if (options.show_general_after_typefiltered
                     && (sIn.value || sOut.value) 
                 ){
-                    filtered_extra = [];
+                    var filtered_extra = [];
                     for (var i in LiteGraph.registered_node_types) {
 						if( inner_test_filter(i, {inTypeOverride: sIn&&sIn.value?"*":false, outTypeOverride: sOut&&sOut.value?"*":false}) )
 							filtered_extra.push(i);
@@ -12002,7 +12002,7 @@ LGraphNode.prototype.executeAction = function(action)
                 if ((sIn.value || sOut.value) && 
                     ( (helper.childNodes.length == 0 && options.show_general_if_none_on_typefilter) )
                 ){
-                    filtered_extra = [];
+                    var filtered_extra = [];
                     for (var i in LiteGraph.registered_node_types) {
 						if( inner_test_filter(i, {skipFilter: true}) )
 							filtered_extra.push(i);
@@ -12266,9 +12266,9 @@ LGraphNode.prototype.executeAction = function(action)
         
         // acheck for input and use default behaviour: save on enter, close on esc
         if (options.checkForInput){
-            var aI = [];
+            var aI = dialog.querySelectorAll("input");
             var focused = false;
-            if (aI = dialog.querySelectorAll("input")){
+            if (aI.length > 0){
                 aI.forEach(function(iX) {
                     iX.addEventListener("keydown",function(e){
                         dialog.modified();

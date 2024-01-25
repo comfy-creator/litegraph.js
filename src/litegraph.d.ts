@@ -381,7 +381,6 @@ export const LiteGraph: {
         on_complete: Function,
         on_error?: Function
     ) => FileReader | Promise<any>;
-    registerNodeType: (type: string, base_class: any) => void;
     reloadNodes: (folder_wildcard: string) => void;
     compareObjects: (a: object, b: object) => boolean;
     distance: (a: Vector2, b: Vector2) => number;
@@ -399,7 +398,6 @@ export const LiteGraph: {
     hex2num: (hex: string) => [number, number, number];
     num2hex: (triplet: [number, number, number]) => string;
     extendClass: <A, B>(target: A, origin: B) => A & B;
-    getParameterNames: (func: Function) => string[];
 };
 
 export type serializedLGraph<
