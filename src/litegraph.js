@@ -14435,14 +14435,22 @@ LGraphNode.prototype.executeAction = function(action)
     }
 })(this);
 
-if (typeof exports != "undefined") {
-    exports.LiteGraph = this.LiteGraph;
-    exports.LGraph = this.LGraph;
-    exports.LLink = this.LLink;
-    exports.LGraphNode = this.LGraphNode;
-    exports.LGraphGroup = this.LGraphGroup;
-    exports.DragAndScale = this.DragAndScale;
-    exports.LGraphCanvas = this.LGraphCanvas;
-    exports.ContextMenu = this.ContextMenu;
-}
+// if (typeof exports != "undefined") {
+//     exports.LiteGraph = this.LiteGraph;
+//     exports.LGraph = this.LGraph;
+//     exports.LLink = this.LLink;
+//     exports.LGraphNode = this.LGraphNode;
+//     exports.LGraphGroup = this.LGraphGroup;
+//     exports.DragAndScale = this.DragAndScale;
+//     exports.LGraphCanvas = this.LGraphCanvas;
+//     exports.ContextMenu = this.ContextMenu;
+// }
 
+export const LiteGraph = this.LiteGraph;
+export const LGraph = this.LGraph;
+export const LLink = this.LLink;
+export const LGraphNode = this.LGraphNode;
+export const LGraphGroup = this.LGraphGroup;
+export const DragAndScale = this.DragAndScale;
+export const LGraphCanvas = this.LGraphCanvas;
+export const ContextMenu = this.ContextMenu;

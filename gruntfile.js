@@ -1,5 +1,8 @@
 module.exports = function (grunt) {
-    // Include the google-closure-compiler plugin for Grunt
+    // Load the necessary plugins
+    grunt.loadNpmTasks("grunt-contrib-concat");
+    grunt.loadNpmTasks("grunt-babel");
+    grunt.loadNpmTasks("grunt-closure-compiler");
     require("google-closure-compiler").grunt(grunt);
 
     grunt.initConfig({
@@ -25,26 +28,53 @@ module.exports = function (grunt) {
                 dest: "build/litegraph.js",
             },
         },
+        babel: {
+            options: {
+                presets: [["@babel/preset-env", { modules: false }]], // Disable module transformation
+                plugins: ["@babel/plugin-transform-modules-commonjs"], // Transform to CommonJS
+                sourceMap: true,
+            },
+            cjs: {
+                options: {
+                    plugins: ["@babel/plugin-transform-modules-commonjs"],
+                },
+                files: {
+                    "build/litegraph.cjs.js": "<%= concat.build.dest %>",
+                },
+            },
+            esm: {
+                options: {
+                    plugins: [], // Do not transform modules
+                    presets: [["@babel/preset-env", { modules: false }]],
+                },
+                files: {
+                    "build/litegraph.esm.js": "<%= concat.build.dest %>",
+                },
+            },
+        },
         "closure-compiler": {
             my_target: {
                 files: {
-                    "build/litegraph.min.js": "<%= projectFiles %>",
+                    "build/litegraph.min.js": "<%= concat.build.dest %>",
                 },
-                options: {
-                    compilation_level: "SIMPLE",
-                    language_in: "ECMASCRIPT_2015",
-                    language_out: "ECMASCRIPT5",
-                    warning_level: "QUIET", // Suppresses all warnings
-                    create_source_map: "build/litegraph.min.js.map",
-                    output_wrapper:
-                        "(function(){\n%output%\n}).call(this)\n//# sourceMappingURL=litegraph.min.js.map",
-                },
+            },
+            options: {
+                compilation_level: "SIMPLE",
+                language_in: "ECMASCRIPT_2015",
+                language_out: "ECMASCRIPT5",
+                warning_level: "QUIET", // Supresses warnings
+                create_source_map: "build/litegraph.min.js.map",
+                output_wrapper:
+                    "(function(){\n%output%\n}).call(this)\n//# sourceMappingURL=litegraph.min.js.map",
             },
         },
     });
 
-    grunt.loadNpmTasks("grunt-contrib-concat");
-    grunt.loadNpmTasks("grunt-closure-tools");
-
-    grunt.registerTask("build", ["concat:build", "closure-compiler"]);
+    // Register the build task
+    grunt.registerTask("build", [
+        "concat:build",
+        "babel:cjs",
+        "babel:esm",
+        "closure-compiler",
+    ]);
 };
