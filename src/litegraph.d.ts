@@ -1210,7 +1210,7 @@ export declare class CurveEditor {
  * @param graph
  * @param options { skip_rendering, autoresize }
  */
-export declare class LGraphCanvas {
+export declare class LGraphCanvas<T extends LGraph = LGraph> {
     static node_colors: Record<
         string,
         {
@@ -1253,7 +1253,7 @@ export declare class LGraphCanvas {
 
     constructor(
         canvas: HTMLCanvasElement | string,
-        graph?: LGraph,
+        graph?: T,
         options?: {
             skip_render?: boolean;
             autoresize?: boolean;
@@ -1303,7 +1303,7 @@ export declare class LGraphCanvas {
     filter: any;
     fps: number;
     frame: number;
-    graph: LGraph;
+    graph: T;
     highlighted_links: Record<number, boolean>;
     highquality_render: boolean;
     inner_text_font: string;
@@ -1414,9 +1414,9 @@ export declare class LGraphCanvas {
     /** clears all the data inside */
     clear(): void;
     /** assigns a graph, you can reassign graphs to the same canvas */
-    setGraph(graph: LGraph, skipClear?: boolean): void;
+    setGraph<U extends LGraph = LGraph>(graph: U, skipClear?: boolean): void;
     /** opens a graph contained inside a node in the current graph */
-    openSubgraph(graph: LGraph): void;
+    openSubgraph<U extends LGraph = LGraph>(graph: U): void;
     /** closes a subgraph contained inside a node */
     closeSubgraph(): void;
     /** assigns a canvas */
