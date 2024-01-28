@@ -415,7 +415,7 @@ export type serializedLGraph<
     version: typeof LiteGraph.VERSION;
 };
 
-export declare class LGraph {
+export declare class LGraph<N extends LGraphNode = LGraphNode> {
     static supported_types: string[];
     static STATUS_STOPPED: 1;
     static STATUS_RUNNING: 2;
@@ -442,15 +442,15 @@ export declare class LGraph {
     starttime: number;
     status: typeof LGraph.STATUS_RUNNING | typeof LGraph.STATUS_STOPPED;
 
-    private _nodes: LGraphNode[];
+    private _nodes: N[];
     private _groups: LGraphGroup[];
-    private _nodes_by_id: Record<number, LGraphNode>;
+    private _nodes_by_id: Record<number, N>;
     /** nodes that are executable sorted in execution order */
     private _nodes_executable:
-        | (LGraphNode & { onExecute: NonNullable<LGraphNode["onExecute"]> }[])
+        | (N & { onExecute: NonNullable<N["onExecute"]> }[])
         | null;
     /** nodes that contain onExecute */
-    private _nodes_in_order: LGraphNode[];
+    private _nodes_in_order: N[];
     private _version: number;
 
     getSupportedTypes(): string[];
@@ -484,7 +484,7 @@ export declare class LGraph {
      * It doesn't include the node itself
      * @return an array with all the LGraphNodes that affect this node, in order of execution
      */
-    getAncestors(node: LGraphNode): LGraphNode[];
+    getAncestors(node: N): N[];
     /**
      * Positions every node in a more readable manner
      */
@@ -519,42 +519,40 @@ export declare class LGraph {
      * Adds a new node instance to this graph
      * @param node the instance of the node
      */
-    add(node: LGraphNode, skip_compute_order?: boolean): void;
+    add(node: N, skip_compute_order?: boolean): void;
     /**
      * Called when a new node is added
      * @param node the instance of the node
      */
-    onNodeAdded(node: LGraphNode): void;
+    onNodeAdded(node: N): void;
     /** Removes a node from the graph */
-    remove(node: LGraphNode): void;
+    remove(node: N): void;
     /** Returns a node by its id. */
-    getNodeById(id: number): LGraphNode | undefined;
+    getNodeById(id: number): N | undefined;
     /**
      * Returns a list of nodes that matches a class
      * @param classObject the class itself (not an string)
      * @return a list with all the nodes of this type
      */
-    findNodesByClass<T extends LGraphNode>(
-        classObject: LGraphNodeConstructor<T>
-    ): T[];
+    findNodesByClass<T extends N>(classObject: LGraphNodeConstructor<T>): T[];
     /**
      * Returns a list of nodes that matches a type
      * @param type the name of the node type
      * @return a list with all the nodes of this type
      */
-    findNodesByType<T extends LGraphNode = LGraphNode>(type: string): T[];
+    findNodesByType<T extends N = N>(type: string): T[];
     /**
      * Returns the first node that matches a name in its title
      * @param title the name of the node to search
      * @return the node or null
      */
-    findNodeByTitle<T extends LGraphNode = LGraphNode>(title: string): T | null;
+    findNodeByTitle<T extends N = N>(title: string): T | null;
     /**
      * Returns a list of nodes that matches a name
      * @param title the name of the node to search
      * @return a list with all the nodes with this name
      */
-    findNodesByTitle<T extends LGraphNode = LGraphNode>(title: string): T[];
+    findNodesByTitle<T extends N = N>(title: string): T[];
     /**
      * Returns the top-most node in this position of the canvas
      * @param x the x coordinate in canvas space
@@ -562,10 +560,10 @@ export declare class LGraph {
      * @param nodes_list a list with all the nodes to search from, by default is all the nodes in the graph
      * @return the node at this position or null
      */
-    getNodeOnPos<T extends LGraphNode = LGraphNode>(
+    getNodeOnPos<T extends N = N>(
         x: number,
         y: number,
-        node_list?: LGraphNode[],
+        node_list?: N[],
         margin?: number
     ): T | null;
     /**
@@ -605,9 +603,9 @@ export declare class LGraph {
     removeOutput(name: string): boolean;
     triggerInput(name: string, value: any): void;
     setCallback(name: string, func: (...args: any[]) => any): void;
-    beforeChange(info?: LGraphNode): void;
-    afterChange(info?: LGraphNode): void;
-    connectionChange(node: LGraphNode): void;
+    beforeChange(info?: N): void;
+    afterChange(info?: N): void;
+    connectionChange(node: N): void;
     /** returns if the graph is in live mode */
     isLive(): boolean;
     /** clears the triggered slot animation in all links (stop visual animation) */
@@ -629,7 +627,7 @@ export declare class LGraph {
     load(url: string): void;
 
     /** Private-property accessors */
-    get nodes(): LGraphNode[];
+    get nodes(): N[];
     get groups(): LGraphGroup[];
 }
 
@@ -1210,7 +1208,10 @@ export declare class CurveEditor {
  * @param graph
  * @param options { skip_rendering, autoresize }
  */
-export declare class LGraphCanvas<T extends LGraph = LGraph> {
+export declare class LGraphCanvas<
+    N extends LGraphNode = LGraphNode,
+    T extends LGraph<N> = LGraph<N>
+> {
     static node_colors: Record<
         string,
         {
@@ -1280,10 +1281,10 @@ export declare class LGraphCanvas<T extends LGraph = LGraph> {
     bgctx: CanvasRenderingContext2D;
     canvas: HTMLCanvasElement;
     clear_background: boolean;
-    connecting_node: LGraphNode | null;
+    connecting_node: N | null;
     connections_width: number;
     ctx: CanvasRenderingContext2D;
-    current_node: LGraphNode | null;
+    current_node: N | null;
     default_connection_color: {
         input_off: string;
         input_on: string;
@@ -1303,7 +1304,7 @@ export declare class LGraphCanvas<T extends LGraph = LGraph> {
     filter: any;
     fps: number;
     frame: number;
-    graph: T;
+    graph?: T;
     highlighted_links: Record<number, boolean>;
     highquality_render: boolean;
     inner_text_font: string;
@@ -1326,12 +1327,12 @@ export declare class LGraphCanvas<T extends LGraph = LGraph> {
     mouse: Vector2;
     graph_mouse: Vector2;
 
-    node_capturing_input: LGraphNode | null;
-    node_dragged: LGraphNode | null;
-    node_in_panel: LGraphNode | null;
-    node_over: LGraphNode | null;
+    node_capturing_input: N | null;
+    node_dragged: N | null;
+    node_in_panel: N | null;
+    node_over: N | null;
     node_title_color: string;
-    node_widget: [LGraphNode, IWidget] | null;
+    node_widget: [N, IWidget] | null;
     /** Called by `LGraphCanvas.drawBackCanvas` */
     onDrawBackground:
         | ((ctx: CanvasRenderingContext2D, visibleArea: Vector4) => void)
@@ -1348,17 +1349,17 @@ export declare class LGraphCanvas<T extends LGraph = LGraph> {
         | ((ctx: CanvasRenderingContext2D, link: LLink, _this: this) => void)
         | null;
     /** Called by `LGraphCanvas.selectNodes` */
-    onNodeMoved: ((node: LGraphNode) => void) | null;
+    onNodeMoved: ((node: N) => void) | null;
     /** Called by `LGraphCanvas.processNodeSelected` */
-    onNodeSelected: ((node: LGraphNode) => void) | null;
+    onNodeSelected: ((node: N) => void) | null;
     /** Called by `LGraphCanvas.deselectNode` */
-    onNodeDeselected: ((node: LGraphNode) => void) | null;
+    onNodeDeselected: ((node: N) => void) | null;
     /** Called by `LGraphCanvas.processNodeDblClicked` */
-    onShowNodePanel: ((node: LGraphNode) => void) | null;
+    onShowNodePanel: ((node: N) => void) | null;
     /** Called by `LGraphCanvas.processNodeDblClicked` */
-    onNodeDblClicked: ((node: LGraphNode) => void) | null;
+    onNodeDblClicked: ((node: N) => void) | null;
     /** Called by `LGraphCanvas.selectNodes` */
-    onSelectionChange: ((nodes: Record<number, LGraphNode>) => void) | null;
+    onSelectionChange: ((nodes: Record<number, N>) => void) | null;
 
     /** Called by `LGraphCanvas.showSearchBox` Use to personalize the search-box */
     onSearchBox:
@@ -1389,7 +1390,7 @@ export declare class LGraphCanvas<T extends LGraph = LGraph> {
     round_radius: number;
     selected_group: null | LGraphGroup;
     selected_group_resizing: boolean;
-    selected_nodes: Record<number, LGraphNode>;
+    selected_nodes: Record<number, N>;
     /** Show additional information on top of the nodes */
     show_info: boolean;
     /** Font used for node titles */
@@ -1398,7 +1399,7 @@ export declare class LGraphCanvas<T extends LGraph = LGraph> {
     use_gradients: boolean;
     visible_area: DragAndScale["visible_area"];
     visible_links: LLink[];
-    visible_nodes: LGraphNode[];
+    visible_nodes: N[];
     /** Modify alpha value of the canvas when zooming */
     zoom_modify_alpha: boolean;
 
@@ -1414,9 +1415,9 @@ export declare class LGraphCanvas<T extends LGraph = LGraph> {
     /** clears all the data inside */
     clear(): void;
     /** assigns a graph, you can reassign graphs to the same canvas */
-    setGraph<U extends LGraph = LGraph>(graph: U, skipClear?: boolean): void;
+    setGraph(graph: T, skipClear?: boolean): void;
     /** opens a graph contained inside a node in the current graph */
-    openSubgraph<U extends LGraph = LGraph>(graph: U): void;
+    openSubgraph<U extends LGraph>(graph: U): void;
     /** closes a subgraph contained inside a node */
     closeSubgraph(): void;
     /** assigns a canvas */
@@ -1455,10 +1456,10 @@ export declare class LGraphCanvas<T extends LGraph = LGraph> {
     processMouseWheel(e: MouseEvent): boolean | undefined;
 
     /** returns true if a position (in graph space) is on top of a node little corner box */
-    isOverNodeBox(node: LGraphNode, canvasX: number, canvasY: number): boolean;
+    isOverNodeBox(node: N, canvasX: number, canvasY: number): boolean;
     /** returns true if a position (in graph space) is on top of a node input slot */
     isOverNodeInput(
-        node: LGraphNode,
+        node: N,
         canvasX: number,
         canvasY: number,
         slotPos: Vector2
@@ -1471,31 +1472,31 @@ export declare class LGraphCanvas<T extends LGraph = LGraph> {
     pasteFromClipboard(): void;
     processDrop(e: DragEvent): void;
     checkDropItem(e: DragEvent): void;
-    processNodeDblClicked(n: LGraphNode): void;
-    processNodeSelected(n: LGraphNode, e: MouseEvent): void;
-    processNodeDeselected(node: LGraphNode): void;
+    processNodeDblClicked(n: N): void;
+    processNodeSelected(n: N, e: MouseEvent): void;
+    processNodeDeselected(node: N): void;
 
     /** selects a given node (or adds it to the current selection) */
-    selectNode(node: LGraphNode, add?: boolean): void;
+    selectNode(node: N, add?: boolean): void;
     /** selects several nodes (or adds them to the current selection) */
-    selectNodes(nodes?: LGraphNode[], add?: boolean): void;
+    selectNodes(nodes?: N[], add?: boolean): void;
     /** removes a node from the current selection */
-    deselectNode(node: LGraphNode): void;
+    deselectNode(node: N): void;
     /** removes all nodes from the current selection */
     deselectAllNodes(): void;
     /** deletes all nodes in the current selection from the graph */
     deleteSelectedNodes(): void;
 
     /** centers the camera on a given node */
-    centerOnNode(node: LGraphNode): void;
+    centerOnNode(node: N): void;
     /** changes the zoom level of the graph (default is 1), you can pass also a place used to pivot the zoom */
     setZoom(value: number, center: Vector2): void;
     /** brings a node to front (above all other nodes) */
-    bringToFront(node: LGraphNode): void;
+    bringToFront(node: N): void;
     /** sends a node to the back (below all other nodes) */
-    sendToBack(node: LGraphNode): void;
+    sendToBack(node: N): void;
     /** checks which nodes are visible (inside the camera area) */
-    computeVisibleNodes(nodes: LGraphNode[]): LGraphNode[];
+    computeVisibleNodes(nodes: N[]): N[];
     /** renders the whole canvas content, by rendering in two separated canvas, one containing the background grid and the connections, and one containing the nodes) */
     draw(forceFG?: boolean, forceBG?: boolean): void;
     /** draws the front canvas (the one containing all the nodes) */
@@ -1505,7 +1506,7 @@ export declare class LGraphCanvas<T extends LGraph = LGraph> {
     /** draws the back canvas (the one containing the background and the connections) */
     drawBackCanvas(): void;
     /** draws the given node inside the canvas */
-    drawNode(node: LGraphNode, ctx: CanvasRenderingContext2D): void;
+    drawNode(node: N, ctx: CanvasRenderingContext2D): void;
     /** draws graphic for node's slot */
     drawSlotGraphic(
         ctx: CanvasRenderingContext2D,
@@ -1515,7 +1516,7 @@ export declare class LGraphCanvas<T extends LGraph = LGraph> {
     ): void;
     /** draws the shape of the given node in the canvas */
     drawNodeShape(
-        node: LGraphNode,
+        node: N,
         ctx: CanvasRenderingContext2D,
         size: [number, number],
         fgColor: string,
@@ -1560,20 +1561,23 @@ export declare class LGraphCanvas<T extends LGraph = LGraph> {
     drawExecutionOrder(ctx: CanvasRenderingContext2D): void;
     /** draws the widgets stored inside a node */
     drawNodeWidgets(
-        node: LGraphNode,
+        node: N,
         posY: number,
         ctx: CanvasRenderingContext2D,
         activeWidget: object
     ): void;
     /** process an event on widgets */
     processNodeWidgets(
-        node: LGraphNode,
+        node: N,
         pos: Vector2,
         event: Event,
         activeWidget: object
     ): void;
     /** draws every group area in the background */
-    drawGroups(canvas: any, ctx: CanvasRenderingContext2D): void;
+    drawGroups(
+        canvas: HTMLCanvasElement | string,
+        ctx: CanvasRenderingContext2D
+    ): void;
     adjustNodesSize(): void;
     /** resizes the canvas to a given size, if no size is passed, then it tries to fill the parentNode */
     resize(width?: number, height?: number): void;
@@ -1593,7 +1597,7 @@ export declare class LGraphCanvas<T extends LGraph = LGraph> {
         event: any
     ): HTMLDivElement;
     showSearchBox(event?: MouseEvent): void;
-    showEditPropertyValue(node: LGraphNode, property: any, options: any): void;
+    showEditPropertyValue(node: N, property: any, options: any): void;
     createDialog(
         html: string,
         options?: { position?: Vector2; event?: MouseEvent }
@@ -1607,14 +1611,14 @@ export declare class LGraphCanvas<T extends LGraph = LGraph> {
     adjustMouseEvent(e: MouseEvent): void;
 
     getCanvasMenuOptions(): ContextMenuItem[];
-    getNodeMenuOptions(node: LGraphNode): ContextMenuItem[];
+    getNodeMenuOptions(node: N): ContextMenuItem[];
     getGroupMenuOptions(): ContextMenuItem[];
     /** Called by `getCanvasMenuOptions`, replace default options */
     getMenuOptions?(): ContextMenuItem[];
     /** Called by `getCanvasMenuOptions`, append to default options */
     getExtraMenuOptions?(): ContextMenuItem[];
     /** Called when mouse right click */
-    processContextMenu(node: LGraphNode, event: Event): void;
+    processContextMenu(node: N, event: Event): void;
 }
 
 declare class ContextMenu {
