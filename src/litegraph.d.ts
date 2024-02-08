@@ -1253,7 +1253,7 @@ export declare class LGraphCanvas<
     static onMenuNodeClone: ContextMenuEventListener;
 
     constructor(
-        canvas: HTMLCanvasElement | string,
+        canvas?: HTMLCanvasElement | string,
         graph?: T,
         options?: {
             skip_render?: boolean;
@@ -1279,7 +1279,7 @@ export declare class LGraphCanvas<
     background_image: string;
     bgcanvas: HTMLCanvasElement;
     bgctx: CanvasRenderingContext2D;
-    canvas: HTMLCanvasElement;
+    canvas?: HTMLCanvasElement;
     clear_background: boolean;
     connecting_node: N | null;
     connections_width: number;
