@@ -1761,4 +1761,10 @@ LiteGraph.registerNodeType("basic/jsonparse", JSONParse);
 
     LiteGraph.registerNodeType("basic/CompareValues", GenericCompare);
     
-})(this);
+})(typeof window !== "undefined"
+    ? window
+    : typeof global !== "undefined"
+    ? global
+    : typeof self !== "undefined"
+    ? self
+    : this);

@@ -198,4 +198,10 @@
         }
     };
     LiteGraph.registerNodeType("logic/IF", logicBranch);
-})(this);
+})(typeof window !== "undefined"
+    ? window
+    : typeof global !== "undefined"
+    ? global
+    : typeof self !== "undefined"
+    ? self
+    : this);

@@ -1,3 +1,12 @@
+const globalScope = // global 'this' is disallowed in js strict mode
+    typeof window !== "undefined"
+        ? window
+        : typeof global !== "undefined"
+        ? global
+        : typeof self !== "undefined"
+        ? self
+        : this;
+
 (function (global) {
     // *************************************************************
     //   LiteGraph CLASS                                     *******
@@ -9,7 +18,6 @@
      * @class LiteGraph
      * @constructor
      */
-
     let LiteGraph = (global.LiteGraph = {
         VERSION: 0.4,
 
@@ -15598,7 +15606,7 @@ LGraphNode.prototype.executeAction = function(action)
                 window.setTimeout(callback, 1000 / 60);
             };
     }
-})(this);
+})(globalScope);
 
 // if (typeof exports != "undefined") {
 //     exports.LiteGraph = this.LiteGraph;
@@ -15611,11 +15619,11 @@ LGraphNode.prototype.executeAction = function(action)
 //     exports.ContextMenu = this.ContextMenu;
 // }
 
-export const LiteGraph = this.LiteGraph;
-export const LGraph = this.LGraph;
-export const LLink = this.LLink;
-export const LGraphNode = this.LGraphNode;
-export const LGraphGroup = this.LGraphGroup;
-export const DragAndScale = this.DragAndScale;
-export const LGraphCanvas = this.LGraphCanvas;
-export const ContextMenu = this.ContextMenu;
+export const LiteGraph = globalScope.LiteGraph;
+export const LGraph = globalScope.LGraph;
+export const LLink = globalScope.LLink;
+export const LGraphNode = globalScope.LGraphNode;
+export const LGraphGroup = globalScope.LGraphGroup;
+export const DragAndScale = globalScope.DragAndScale;
+export const LGraphCanvas = globalScope.LGraphCanvas;
+export const ContextMenu = globalScope.ContextMenu;
