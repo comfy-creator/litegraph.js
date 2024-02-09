@@ -48,7 +48,7 @@ module.exports = {
         "no-redeclare": "warn",
         "no-inner-declarations": "warn",
         "no-constant-condition": "warn",
-        "no-unused-vars": "warn",
+        "no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
         "no-mixed-spaces-and-tabs": "warn",
         "no-unreachable": "warn",
         "curly": ["warn", "multi-line"]

@@ -13076,14 +13076,25 @@ LGraphNode.prototype.executeAction = function(action)
                 if (!first) {
                     first = type;
                 }
-                help.innerText = type;
-                help.dataset["type"] = escape(type);
+                
+                const nodeType = LiteGraph.registered_node_types[type];
+                if (nodeType && nodeType.title) {
+                    help.innerText = nodeType.title;
+                    const typeEl = document.createElement("span");
+                    typeEl.className = "litegraph lite-search-item-type";
+                    typeEl.textContent = type;
+                    help.append(typeEl);
+                } else {
+                    help.innerText = type;
+                }
+
+                help.dataset["type"] = encodeURIComponent(type);
                 help.className = "litegraph lite-search-item";
                 if (className) {
                     help.className += " " + className;
                 }
-                help.addEventListener("click", function (e) {
-                    select(unescape(this.dataset["type"]));
+                help.addEventListener("click", function (_event) {
+                    select(decodeURIComponent(this.dataset["type"]));
                 });
                 helper.appendChild(help);
             }
