@@ -33,6 +33,7 @@ module.exports = function (grunt) {
                 presets: [["@babel/preset-env", { modules: false }]], // Disable module transformation
                 plugins: ["@babel/plugin-transform-modules-commonjs"], // Transform to CommonJS
                 sourceMap: true,
+                compact: false
             },
             cjs: {
                 options: {
